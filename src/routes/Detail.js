@@ -10,12 +10,23 @@ const Loading = styled.div`
   margin-top: 10px;
 `;
 
+const Movie = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-image: url(${props => props.bg});
+  background-cover: contain;
+  background-size: 100vw 100vh;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+`;
+
 const GET_MOVIE = gql`
   query detail($id: Int!) {
     movie(id: $id) {
-      id
       title
       medium_cover_image
+      language
+      rating
       description_intro
     }
   }
@@ -26,11 +37,21 @@ const Detail = () => {
   const { loading, error, data } = useQuery(GET_MOVIE, {
     variables: { id: +id },
   });
-  console.log(data);
+  // const { title, medium_cover_image, language, rating, description_intro } =
+  //   data.movie;
   return (
     <div>
       {loading && <Loading>Loading...</Loading>}
-      {!loading && data && <h1>{data.movie.title}</h1>}
+      {!loading && data && (
+        <Movie bg={data.movie.medium_cover_image}>
+          {
+            <div>
+              <h1>{data.movie.title}</h1>
+              <h2>{data.movie.description_intro}</h2>
+            </div>
+          }
+        </Movie>
+      )}
     </div>
   );
 };

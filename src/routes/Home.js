@@ -15,6 +15,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 100%;
 `;
 const Header = styled.header`
@@ -42,6 +43,14 @@ const Loading = styled.div`
   margin-top: 10px;
 `;
 
+const Movies = styled.div`
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(auto, 300px));
+  row-gap: 50px;
+  margin: 30px auto;
+`;
+
 const Home = () => {
   const { loading, error, data } = useQuery(GET_MOVIES);
   console.log(data);
@@ -52,9 +61,13 @@ const Home = () => {
         <Subtitle>I love GraphQL</Subtitle>
       </Header>
       {loading && <Loading>Loading...</Loading>}
-      {!loading &&
-        data.movies &&
-        data.movies.map(m => <Movie key={m.id} id={m.id} />)}
+      {!loading && data.movies && (
+        <Movies>
+          {data.movies.map(m => (
+            <Movie key={m.id} id={m.id} coverImage={m.medium_cover_image} />
+          ))}
+        </Movies>
+      )}
     </Container>
   );
 };
